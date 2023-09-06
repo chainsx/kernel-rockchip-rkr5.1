@@ -1,7 +1,5 @@
 # SPDX-License-Identifier: GPL-2.0
 
-ifeq ($(CONFIG_VENDOR_FRIENDLYELEC),y)
-
 dtb-$(CONFIG_ARCH_ROCKCHIP) += \
 	rk3399-nanopi4-rev00.dtb \
 	rk3399-nanopi4-rev01.dtb \
@@ -26,8 +24,6 @@ dtb-$(CONFIG_ARCH_ROCKCHIP) += \
 	rk3588-nanopi6-rev03.dtb \
 	rk3588-nanopi6-rev04.dtb \
 	rk3588-nanopi6-rev05.dtb
-
-else
 
 dtb-$(CONFIG_ARCH_ROCKCHIP) += px30-evb.dtb
 dtb-$(CONFIG_ARCH_ROCKCHIP) += px30-evb-ddr3-v10.dtb
@@ -228,5 +224,3 @@ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3588s-evb8-lp4x-v10.dtb
 dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3588s-tablet-rk806-single-v10.dtb
 dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3588s-tablet-v10.dtb
 dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3588s-firefly-roc-pc.dtb
-
-endif
