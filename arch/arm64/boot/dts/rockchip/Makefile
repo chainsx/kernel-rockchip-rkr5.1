@@ -25,6 +25,11 @@ dtb-$(CONFIG_ARCH_ROCKCHIP) += \
 	rk3588-nanopi6-rev04.dtb \
 	rk3588-nanopi6-rev05.dtb
 
+dtb-$(CONFIG_ARCH_ROCKCHIP) += \
+	rk3566-firefly-roc-pc.dtb \
+	rk3568-firefly-roc-pc.dtb \
+	rk3588s-firefly-roc-pc.dtb
+
 dtb-$(CONFIG_ARCH_ROCKCHIP) += px30-evb.dtb
 dtb-$(CONFIG_ARCH_ROCKCHIP) += px30-evb-ddr3-v10.dtb
 dtb-$(CONFIG_ARCH_ROCKCHIP) += px30-evb-ddr3-v10-avb.dtb
@@ -145,14 +150,12 @@ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3566-rk817-eink-w103.dtb
 dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3566-rk817-tablet.dtb
 dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3566-rk817-tablet-k108.dtb
 dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3566-rk817-tablet-rkg11.dtb
-dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3566-rk817-tablet-v10.dtb
 dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3568-evb1-ddr4-v10.dtb
 dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3568-evb1-ddr4-v10-dual-camera.dtb
 dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3568-evb1-ddr4-v10-linux.dtb
 dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3568-evb1-ddr4-v10-linux-spi-nor.dtb
 dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3568-evb2-lp4x-v10.dtb
 dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3568-evb2-lp4x-v10-bt1120-to-hdmi.dtb
-dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3568-firefly-roc-pc.dtb
 dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3568-evb5-ddr4-v10.dtb
 dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3568-evb6-ddr3-v10.dtb
 dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3568-evb6-ddr3-v10-linux.dtb
@@ -223,4 +226,3 @@ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3588s-evb4-lp4x-v10-linux.dtb
 dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3588s-evb8-lp4x-v10.dtb
 dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3588s-tablet-rk806-single-v10.dtb
 dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3588s-tablet-v10.dtb
-dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3588s-firefly-roc-pc.dtb
