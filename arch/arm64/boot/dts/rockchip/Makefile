@@ -27,6 +27,7 @@ dtb-$(CONFIG_ARCH_ROCKCHIP) += \
 
 dtb-$(CONFIG_ARCH_ROCKCHIP) += \
 	rk3566-firefly-roc-pc.dtb \
+	rk3566-roc-pc.dtb \
 	rk3568-firefly-roc-pc.dtb \
 	rk3588s-firefly-roc-pc.dtb
 

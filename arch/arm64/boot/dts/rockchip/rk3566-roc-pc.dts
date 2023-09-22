@@ -140,59 +140,22 @@
 		clock-names = "ext_clock";
 		pinctrl-names = "default";
 		pinctrl-0 = <&wifi_enable_h>;
-		/*
-			* On the module itself this is one of these (depending
-			* on the actual card populated):
-			* - SDIO_RESET_L_WL_REG_ON
-			* - PDN (power down when low)
-		*/
-		reset-gpios = <&gpio3 RK_PD5 GPIO_ACTIVE_LOW>;
+		reset-gpios = <&gpio2 RK_PB1 GPIO_ACTIVE_LOW>;
 	};
 
-	wireless_wlan: wireless-wlan {
-		compatible = "wlan-platdata";
-		rockchip,grf = <&grf>;
-		wifi_chip_type = "ap6398s";
-		pinctrl-names = "default";
-		pinctrl-0 = <&wifi_host_wake_irq>;
-		WIFI,host_wake_irq = <&gpio3 RK_PD4 GPIO_ACTIVE_HIGH>;
-		status = "disabled";
-	};
-
-	wireless_bluetooth: wireless-bluetooth {
-		compatible = "bluetooth-platdata";
-		clocks = <&rk809 1>;
-		clock-names = "ext_clock";
-		//wifi-bt-power-toggle;
-		uart_rts_gpios = <&gpio2 RK_PB1 GPIO_ACTIVE_LOW>;
-		pinctrl-names = "default", "rts_gpio";
-		pinctrl-0 = <&uart8m0_rtsn>;
-		pinctrl-1 = <&uart8_gpios>;
-		BT,reset_gpio    = <&gpio3 RK_PA0 GPIO_ACTIVE_HIGH>;
-		BT,wake_gpio     = <&gpio3 RK_PA1 GPIO_ACTIVE_HIGH>;
-		BT,wake_host_irq = <&gpio3 RK_PA2 GPIO_ACTIVE_HIGH>;
-		status = "disabled";
+	/* switched by pmic_sleep */
+	vcc1v8_s3: vcca1v8_s3: vcc1v8-s3 {
+		compatible = "regulator-fixed";
+		regulator-name = "vcc1v8_s3";
+		regulator-always-on;
+		regulator-boot-on;
+		regulator-min-microvolt = <1800000>;
+		regulator-max-microvolt = <1800000>;
+		vin-supply = <&vcc_1v8>;
 	};
 
 	test-power {
 		status = "okay";
-	};
-
-	vcc_camera_ov5647: vcc-camera-ov5647 {
-		status = "okay";
-		compatible = "regulator-fixed";
-		regulator-name = "vcc_camera_ov5647";
-		regulator-min-microvolt = <3300000>;
-		regulator-max-microvolt = <3300000>;
-		regulator-always-on;
-		regulator-boot-on;
-	};
-
-	ext_cam_ov5647_clk: external-camera-ov5647-clock {
-		compatible = "fixed-clock";
-		clock-frequency = <25000000>;
-		clock-output-names = "ext_cam_ov5647_clk";
-		#clock-cells = <0>;
 	};
 
 	vcc_sd: vcc-sd {
@@ -640,19 +603,6 @@
 
 &pinctrl {
 
-	sd {
-		sdmmc0_pwr_h: sdmmc0-pwr-h {
-			rockchip,pins =
-			        <0 RK_PB0 RK_FUNC_GPIO &pcfg_pull_none>;
-		};
-	};
-
-	mxc6655xa {
-		mxc6655xa_irq_gpio: mxc6655xa_irq_gpio {
-			rockchip,pins = <3 RK_PC1 RK_FUNC_GPIO &pcfg_pull_none>;
-		};
-	};
-
 	pmic {
 		pmic_int: pmic_int {
 			rockchip,pins =
@@ -675,43 +625,23 @@
 		};
 	};
 
-	touch {
-		touch_gpio: touch-gpio {
-			rockchip,pins =
-				<0 RK_PB5 RK_FUNC_GPIO &pcfg_pull_up>,
-				<0 RK_PB6 RK_FUNC_GPIO &pcfg_pull_none>;
-		};
-	};
-
 	sdio-pwrseq {
 		wifi_enable_h: wifi-enable-h {
-			rockchip,pins = <3 RK_PD5 RK_FUNC_GPIO &pcfg_pull_none>;
-		};
-	};
-
-	wireless-wlan {
-		wifi_host_wake_irq: wifi-host-wake-irq {
-			rockchip,pins = <3 RK_PD4 RK_FUNC_GPIO &pcfg_pull_down>;
-		};
-	};
-
-	wireless-bluetooth {
-		uart1_rts_gpio: uart1-rts-gpio {
-            rockchip,pins = <2  RK_PB5 RK_FUNC_GPIO &pcfg_pull_none>;
-        };
-
-        bt_host_wake_irq: bt-host-wake-irq {
-            rockchip,pins = <2 RK_PC1 RK_FUNC_GPIO &pcfg_pull_down>;
-        };
-        bt_host_wake_gpio: bt-host-wake-gpio {
-            rockchip,pins = <2 RK_PC0 RK_FUNC_GPIO &pcfg_pull_down>;
-        };
-        bt_poweren: bt-poweren {
-            rockchip,pins = <2 RK_PB7 RK_FUNC_GPIO &pcfg_pull_down>;
-        };
-
-		uart8_gpios: uart8-gpios {
 			rockchip,pins = <2 RK_PB1 RK_FUNC_GPIO &pcfg_pull_none>;
+		};
+	};
+
+	bt {
+		bt_enable_h: bt-enable-h {
+			rockchip,pins = <2 RK_PC1 RK_FUNC_GPIO &pcfg_pull_none>;
+		};
+
+		bt_host_wake_l: bt-host-wake-l {
+			rockchip,pins = <2 RK_PC0 RK_FUNC_GPIO &pcfg_pull_down>;
+		};
+
+		bt_wake_l: bt-wake-l {
+			rockchip,pins = <2 RK_PB7 RK_FUNC_GPIO &pcfg_pull_none>;
 		};
 	};
 
@@ -756,41 +686,14 @@
 			rockchip,pins = <1 RK_PB2 RK_FUNC_GPIO &pcfg_pull_none>;
 		};
 	};
-
-	edp {
-	        edp_hpd: edp-hpd {
-	                rockchip,pins = <0 RK_PA0 RK_FUNC_GPIO &pcfg_pull_none>;
-	        };
-
-	        bl_en: bl-en {
-	                rockchip,pins = <0 RK_PB5 RK_FUNC_GPIO &pcfg_output_high>;
-	        };
-	};
 };
-
- /*
-  * There are 10 independent IO domains in RK3566/RK3568, including PMUIO[0:2] and VCCIO[1:7].
-  * 1/ PMUIO0 and PMUIO1 are fixed-level power domains which cannot be configured;
-  * 2/ PMUIO2 and VCCIO1,VCCIO[3:7] domains require that their hardware power supply voltages
-  *    must be consistent with the software configuration correspondingly
-  *	a/ When the hardware IO level is connected to 1.8V, the software voltage configuration
-  *	   should also be configured to 1.8V accordingly;
-  *	b/ When the hardware IO level is connected to 3.3V, the software voltage configuration
-  *	   should also be configured to 3.3V accordingly;
-  * 3/ VCCIO2 voltage control selection (0xFDC20140)
-  *	BIT[0]: 0x0: from GPIO_0A7 (default)
-  *	BIT[0]: 0x1: from GRF
-  *    Default is determined by Pin FLASH_VOL_SEL/GPIO0_A7:
-  *	L:VCCIO2 must supply 3.3V
-  *	H:VCCIO2 must supply 1.8V
-  */
 
 &pmu_io_domains {
         status = "okay";
         pmuio1-supply = <&vcc3v3_pmu>;
         pmuio2-supply = <&vcc3v3_pmu>;
         vccio1-supply = <&vcc_3v3>;
-	vccio2-supply = <&vcc_1v8>;
+		vccio2-supply = <&vcc_1v8>;
         vccio3-supply = <&vccio_sd>;
         vccio4-supply = <&vcc_1v8>;
         vccio5-supply = <&vcc_3v3>;
@@ -881,47 +784,27 @@
     status = "okay";
 };
 
-&sdio_pwrseq {
-    reset-gpios = <&gpio2 RK_PB1 GPIO_ACTIVE_LOW>;
-    status = "okay";
-};
-
-&wifi_enable_h {
-    rockchip,pins = <2 RK_PB1 RK_FUNC_GPIO &pcfg_pull_none>;
-};
-
-// iomux with GPIO2_B2(WIFI,host_wake_irq)
-&uart8 {
-    status = "disabled";
-};
-
-&wireless_wlan {
-    wifi_chip_type = "ap6356s";
-    pinctrl-names = "default";
-    pinctrl-0 = <&wifi_host_wake_irq>;
-    //WIFI,poweren_gpio = <&gpio3 29 0>;
-    WIFI,host_wake_irq = <&gpio2 RK_PB2 0>;
-    status = "okay";
+&uart0 {
+	status = "disabled";
 };
 
 &uart1 {
     pinctrl-names = "default";
     pinctrl-0 = <&uart1m0_xfer &uart1m0_ctsn>;
     status = "okay";
-};
 
-&wireless_bluetooth {
-    uart_rts_gpios = <&gpio2 RK_PB5 GPIO_ACTIVE_LOW>;
-    pinctrl-names = "default", "rts_gpio";
-    pinctrl-0 = <&uart1m0_rtsn
-        &bt_host_wake_gpio
-        &bt_poweren
-        &bt_host_wake_irq>;
-    pinctrl-1 = <&uart1_rts_gpio>;
-    BT,reset_gpio    = <&gpio2 RK_PB7 GPIO_ACTIVE_HIGH>;
-    BT,wake_gpio     = <&gpio2 RK_PC0 GPIO_ACTIVE_HIGH>;
-    BT,wake_host_irq = <&gpio2 RK_PC1 GPIO_ACTIVE_HIGH>;
-    status = "okay";
+    bluetooth {
+		compatible = "brcm,bcm43438-bt";
+		clocks = <&rk809 1>;
+		clock-names = "lpo";
+		device-wake-gpios = <&gpio2 RK_PC1 GPIO_ACTIVE_HIGH>;
+		host-wake-gpios = <&gpio2 RK_PC0 GPIO_ACTIVE_HIGH>;
+		shutdown-gpios = <&gpio2 RK_PB7 GPIO_ACTIVE_HIGH>;
+		pinctrl-names = "default";
+		pinctrl-0 = <&bt_host_wake_l &bt_wake_l &bt_enable_h>;
+		vbat-supply = <&vcc3v3_sys>;
+		vddio-supply = <&vcca1v8_pmu>;
+	};
 };
 
 &sfc {
@@ -1093,140 +976,4 @@
 
 &i2c1 {
         status = "okay";
-
-        ov5647: ov5647@36 {
-                status = "disabled";
-                compatible = "ovti,ov5647";
-                reg = <0x36>;
-		clocks = <&ext_cam_ov5647_clk>;
-                clock-names = "ext_cam_ov5647_clk";
-                pwdn-gpios = <&gpio2 RK_PC6 GPIO_ACTIVE_LOW>;
-		rockchip,camera-module-index = <0>;
-		rockchip,camera-module-facing = "back";
-		rockchip,camera-module-name = "LMM248";
-		rockchip,camera-module-lens-name = "YXC-M804A2";
-                port {
-                        ov5647_out: endpoint {
-                                remote-endpoint = <&dphy1_in>;
-                                data-lanes = <1 2>;
-                        };
-                };
-        };
-
-	raspits_panel: raspits-panel@45 {
-                status = "disabled";
-		compatible = "raspberrypi,7inch-touchscreen-panel";
-		reg = <0x45>;
-
-		port {
-			panel_in_dsi1: endpoint {
-				remote-endpoint = <&dsi1_out_panel>;
-			};
-		};
-	};
-
-	raspits_touch_ft5426: raspits-touch-ft5426@38 {
-                status = "disabled";
-		compatible = "raspits_ft5426";
-		reg = <0x38>;
-	};
-};
-
-&csi2_dphy_hw {
-      status = "disabled";
-};
-
-&csi2_dphy0 {
-        status = "disabled";
-};
-
-&csi2_dphy1 {
-        status = "disabled";
-        /*
-        * dphy1 only used for split mode,
-        * can be used  concurrently  with dphy2
-        * full mode and split mode are mutually exclusive
-        */
-        ports {
-                #address-cells = <1>;
-                #size-cells = <0>;
-
-                port@0 {
-                        reg = <0>;
-                        #address-cells = <1>;
-                        #size-cells = <0>;
-
-                        dphy1_in: endpoint@1 {
-                                        reg = <1>;
-                                        remote-endpoint = <&ov5647_out>;
-                                        data-lanes = <1 2>;
-                        };
-                };
-
-                port@1 {
-                        reg = <1>;
-                        #address-cells = <1>;
-                        #size-cells = <0>;
-
-                        dphy1_out: endpoint@1 {
-                                        reg = <1>;
-                                        remote-endpoint = <&isp0_in>;
-                        };
-                };
-        };
-};
-
-&rkisp {
-        status = "disabled";
-};
-
-&rkisp_mmu {
-        status = "disabled";
-};
-
-&rkisp_vir0 {
-        status = "disabled";
-        port {
-                #address-cells = <1>;
-                #size-cells = <0>;
-
-                isp0_in: endpoint@0 {
-                        reg = <0>;
-                        remote-endpoint = <&dphy1_out>;
-                };
-        };
-};
-
-&edp {
-	status = "disabled";
-	force-hpd;
-	hpd-gpios = <&gpio0 RK_PA0 GPIO_ACTIVE_HIGH>;
-	pinctrl-names = "default";
-	pinctrl-0 = <&edp_hpd &bl_en>;
-};
-
-&edp_phy {
-	status = "disabled";
-};
-
-&route_edp {
-	status = "disabled";
-};
-
-&pwm2 {
-	status = "disabled";
-};
-
-&dsi1 {
-	status = "disabled";
-
-	ports {
-		port@1 {
-			reg = <1>;
-
-			dsi1_out_panel: endpoint {
-				remote-endpoint = <&panel_in_dsi1>;
-			};
-		};
-	};
 };
